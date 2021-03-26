@@ -24,7 +24,34 @@ public class JpaMain {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
 
+        /*
+        JPA에서 가장 중요한 2가지
+        객체와 관계형 데이터베이스 매핑하기(Object Relational Mapping - ORM)
+        영속성 컨텍스트 - "엔티티를 영구 저장하는 환경", EntityManager.persist(entity);
+        엔티티 매니저를 통해 DB가 아닌 영속성 컨텍스트에 저장하는 것
+        엔티티 생명주기 .. 비영속, 영속, 준영속, 삭제
+         */
+
         try {
+
+            // 비영속
+            Member member = new Member();
+//            member.setId(101L);
+//            member.setName("Hello JPA!");
+
+            // 영속(DB에 쿼리가 날라가는게 아님) , COMMIT 시점
+            System.out.println("== BEFORE ==");
+            em.persist(member);
+            //em.flush();
+            System.out.println("== AFTER ==");
+
+            // 조회를 할 때 SELECT 쿼리를 안날림 => 1차 캐시 위에서 persist() 에서 DB가 아닌 영속 컨텍스트에 저장
+            Member findMember = em.find(Member.class, 101L);
+
+            System.out.println("id: " + findMember.getId());
+            //System.out.println("name: " + findMember.getName());
+
+
             // INSERT
             /*Member member = new Member();
             member.setId(1L);
